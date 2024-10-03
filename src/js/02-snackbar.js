@@ -1,36 +1,38 @@
-document
-  .getElementById('promiseForm')
-  .addEventListener('submit', function (event) {
-    event.preventDefault();
+const form = document.querySelector('.form');
 
-    // Pobranie wartości wprowadzonych przez użytkownika
-    const delay = document.getElementById('delay').value;
-    const state = document.querySelector(
-      'input[name="promiseResult"]:checked'
-    ).value;
+// Funkcja, która obsługuje utworzenie obietnicy
+form.addEventListener('submit', event => {
+  event.preventDefault(); // Zapobiegaj przeładowaniu strony
 
-    // Funkcja tworząca obietnicę
-    const promise = new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (promiseResult === 'fulfilled') {
-          resolve(delay); // Zwracamy wartość opóźnienia w przypadku sukcesu
-        } else {
-          reject(delay); // Zwracamy wartość opóźnienia w przypadku odrzucenia
-        }
-      }, delay);
-    });
+  const formData = new FormData(event.target);
+  const delay = Number(formData.get('delay'));
+  const state = formData.get('state');
 
-    promise
-      .then(delay => {
-        iziToast.success({
-          title: 'Success',
-          message: `Fulfilled promise in ${delay}ms`,
-        });
-      })
-      .catch(delay => {
-        iziToast.error({
-          title: 'Error',
-          message: `Rejected promise in ${delay}ms`,
-        });
+  // Tworzymy obietnicę z opóźnieniem
+  createPromise(delay, state)
+    .then(delay => {
+      iziToast.success({
+        title: 'Success',
+        message: `✅ Fulfilled promise in ${delay}ms`,
       });
+    })
+    .catch(delay => {
+      iziToast.error({
+        title: 'Error',
+        message: `❌ Rejected promise in ${delay}ms`,
+      });
+    });
+});
+
+// Funkcja tworząca obietnicę
+function createPromise(delay, state) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (state === 'fulfilled') {
+        resolve(delay);
+      } else {
+        reject(delay);
+      }
+    }, delay);
   });
+}
