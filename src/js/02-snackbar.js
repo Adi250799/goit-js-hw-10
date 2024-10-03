@@ -1,22 +1,23 @@
+import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
+
 const form = document.querySelector('.form');
 
-// Funkcja, która obsługuje utworzenie obietnicy
-form.addEventListener('submit', event => {
-  event.preventDefault(); // Zapobiegaj przeładowaniu strony
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
 
-  const formData = new FormData(event.target);
-  const delay = Number(formData.get('delay'));
-  const state = formData.get('state');
+  const delay = parseInt(form.delay.value);
+  const state = form.state.value;
 
-  // Tworzymy obietnicę z opóźnieniem
+  // Tworzenie obietnicy
   createPromise(delay, state)
-    .then(delay => {
+    .then((delay) => {
       iziToast.success({
         title: 'Success',
         message: `✅ Fulfilled promise in ${delay}ms`,
       });
     })
-    .catch(delay => {
+    .catch((delay) => {
       iziToast.error({
         title: 'Error',
         message: `❌ Rejected promise in ${delay}ms`,
@@ -24,7 +25,6 @@ form.addEventListener('submit', event => {
     });
 });
 
-// Funkcja tworząca obietnicę
 function createPromise(delay, state) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {

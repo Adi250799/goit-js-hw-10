@@ -24,12 +24,14 @@ const options = {
     const now = new Date();
     selectedDate = selectedDates[0];
 
+    // Dezaktywuj przycisk po każdej zmianie daty
+    startButton.disabled = true;
+
     if (selectedDate <= now) {
       iziToast.error({
         title: 'Błąd',
         message: 'Please choose a date in the future.',
       });
-      startButton.disabled = true;
     } else {
       startButton.disabled = false;
     }
@@ -56,6 +58,7 @@ function updateTimer() {
       title: 'Gratulacje',
       message: 'Czas się skończył!',
     });
+    startButton.disabled = true; // Blokada przycisku po zakończeniu odliczania
   }
 }
 
